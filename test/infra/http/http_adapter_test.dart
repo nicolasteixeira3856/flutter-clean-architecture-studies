@@ -9,17 +9,16 @@ class HttpAdapter {
 
   HttpAdapter(this.client);
 
-  Future<void> request({
-    @required String url,
-    @required String method
-  }) async {
-    await client.post(url);
+  Future<void> request({@required String url, @required String method}) async {
+    final headers = {
+      'content-type': 'application/json',
+      'accept': 'application/json'
+    };
+    await client.post(url, headers: headers);
   }
 }
 
-class ClientSpy extends Mock implements Client {
-
-}
+class ClientSpy extends Mock implements Client {}
 
 void main() {
   group('post', () {
@@ -30,8 +29,10 @@ void main() {
 
       await sut.request(url: url, method: 'post');
 
-      verify(client.post(url));
+      verify(client.post(url, headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json'
+      }));
     });
   });
-
 }
